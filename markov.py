@@ -2,7 +2,8 @@
 
 import sys
 from random import choice
-
+import discord 
+import os
 
 def open_and_read_file(filenames):
     """Take list of files. Open them, read them, and return one long string."""
@@ -22,6 +23,7 @@ def make_chains(text_string):
     chains = {}
 
     words = text_string.split()
+
     for i in range(len(words) - 2):
         key = (words[i], words[i + 1])
         value = words[i + 2]
@@ -64,3 +66,21 @@ text = open_and_read_file(filenames)
 
 # Get a Markov chain
 chains = make_chains(text)
+
+client = discord.Client()
+
+
+@client.event
+async def on_ready():
+    print(f'Successfully connected! Logged in as {client.user}.')
+
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    await message.channel.send(make_text(chains))
+
+
+client.run('NzMzMDkxOTk5MTQ1Nzg3NDU0.Xw-HfQ.TkbrNxwHh3oyhybyKKce2foY05g')
